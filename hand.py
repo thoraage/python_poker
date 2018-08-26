@@ -7,8 +7,8 @@ class Hand:
         self.cards.sort(key = lambda c: (c.value, c.colour))
 
     def get_combination(self):
-        for fn in [lambda me: me.is_straight(), lambda me: me.is_card()]:
-            value = fn(self)
+        for fn in [self.is_straight, self.is_card]:
+            value = fn()
             if value != None:
                 return value
 
