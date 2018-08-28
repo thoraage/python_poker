@@ -24,6 +24,10 @@ class HandTestCase(unittest.TestCase):
         hand = decode_hand("V2,HEARTS;V4,HEARTS;V3,HEARTS;KN,HEARTS;V5,HEARTS")
         self.assertEqual(hand.get_combination(), (Combination.FLUSH, Card(Value.KN, Colour.HEARTS)))
 
+    def test_is_three_equal(self):
+        hand = decode_hand("Q,SPADES;V2,HEARTS;K,HEARTS;V2,CLUBS;V2,DIAMONDS")
+        self.assertEqual(hand.get_combination(), (Combination.THREE_EQUAL, Card(Value.V2, Colour.HEARTS)))
+
     def test_is_card(self):
         hand = decode_hand("V2,SPADES;V4,HEARTS;V3,HEARTS;KN,HEARTS;V5,HEARTS")
         self.assertEqual(hand.get_combination(), (Combination.CARD, Card(Value.KN, Colour.HEARTS)))
