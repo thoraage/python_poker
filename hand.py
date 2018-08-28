@@ -7,7 +7,7 @@ class Hand:
         self.cards.sort(key = lambda c: (c.value, c.colour))
 
     def get_combination(self):
-        for fn in [self.is_straight_flush, self.is_four_equal, self.is_straight, self.is_flush, self.is_card]:
+        for fn in [self.is_straight_flush, self.is_four_equal, self.is_full_house, self.is_straight, self.is_flush, self.is_card]:
             value = fn()
             if value != None:
                 return value
@@ -22,6 +22,14 @@ class Hand:
         for cards in dict.values():
             if len(cards) == 4:
                 return (Combination.FOUR_EQUAL, cards[-1])
+        return None
+
+    def is_full_house(self):
+        dict = group_by(self.cards, lambda card: card.value)
+        distrib = [len(cards) for cards in dict.values()]
+        distrib.sort()
+        if ([2, 3] == distrib):
+            return (Combination.FULL_HOUSE, self.cards[-1])
         return None
 
     def is_straight(self):

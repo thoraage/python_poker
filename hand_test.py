@@ -12,6 +12,10 @@ class HandTestCase(unittest.TestCase):
         hand = decode_hand("V2,SPADES;V2,HEARTS;K,HEARTS;V2,CLUBS;V2,DIAMONDS")
         self.assertEqual(hand.get_combination(), (Combination.FOUR_EQUAL, Card(Value.V2, Colour.SPADES)))
 
+    def test_is_full_house(self):
+        hand = decode_hand("K,SPADES;V2,HEARTS;K,HEARTS;V2,CLUBS;V2,DIAMONDS")
+        self.assertEqual(hand.get_combination(), (Combination.FULL_HOUSE, Card(Value.K, Colour.SPADES)))
+
     def test_is_straight(self):
         hand = decode_hand("V2,SPADES;V4,HEARTS;V3,HEARTS;V6,HEARTS;V5,HEARTS")
         self.assertEqual(hand.get_combination(), (Combination.STRAIGHT, Card(Value.V6, Colour.HEARTS)))
