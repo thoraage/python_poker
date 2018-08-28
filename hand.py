@@ -7,13 +7,22 @@ class Hand:
         self.cards.sort(key = lambda c: (c.value, c.colour))
 
     def get_combination(self):
-        for fn in [self.is_straight, self.is_flush, self.is_card]:
+        for fn in [self.is_straight_flush, self.is_four_equal, self.is_straight, self.is_flush, self.is_card]:
             value = fn()
             if value != None:
                 return value
 
-    def is_card(self):
-        return (Combination.CARD, self.cards[-1])
+    def is_straight_flush(self):
+        if self.is_straight() and self.is_flush():
+            return (Combination.STRAIGHT_FLUSH, self.cards[-1])
+        return None
+
+    def is_four_equal(self):
+        dict = group_by(self.cards, lambda card: card.value)
+        for cards in dict.values():
+            if len(cards) == 4:
+                return (Combination.FOUR_EQUAL, cards[-1])
+        return None
 
     def is_straight(self):
         if all(map(lambda pair: pair[0].value + 1 == pair[1].value, window(self.cards, 2))):
@@ -21,10 +30,13 @@ class Hand:
         return None
 
     def is_flush(self):
-        dict = group_by(self.cards, lambda card: card.colour).values()
+        dict = group_by(self.cards, lambda card: card.colour)
         if (len(dict) == 1):
             return (Combination.FLUSH, self.cards[-1])
         return None
+
+    def is_card(self):
+        return (Combination.CARD, self.cards[-1])
 
 class Combination(IntEnum):
     CARD = 1,
