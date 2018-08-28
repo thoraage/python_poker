@@ -7,13 +7,25 @@ class HandTestCase(unittest.TestCase):
     def test_is_straight(self):
         hand = decode_hand("V2,SPADES;V4,HEARTS;V3,HEARTS;V6,HEARTS;V5,HEARTS")
         self.assertEqual(hand.get_combination(), (Combination.STRAIGHT, Card(Value.V6, Colour.HEARTS)))
-        hand.cards[4].value = Value.KN
-        self.assertEqual(hand.get_combination(), (Combination.CARD, Card(Value.KN, Colour.HEARTS)))
 
-#    def test_is_flush(self):
+    def test_is_flush(self):
+        hand = decode_hand("V2,HEARTS;V4,HEARTS;V3,HEARTS;KN,HEARTS;V5,HEARTS")
+        self.assertEqual(hand.get_combination(), (Combination.FLUSH, Card(Value.KN, Colour.HEARTS)))
+
+    def test_is_card(self):
+        hand = decode_hand("V2,SPADES;V4,HEARTS;V3,HEARTS;KN,HEARTS;V5,HEARTS")
+        self.assertEqual(hand.get_combination(), (Combination.CARD, Card(Value.KN, Colour.HEARTS)))
 
     def test_window(self):
         self.assertEqual(window([1,2,3], 2), [[1,2], [2,3]])
+
+    def test_group_by(self):
+        actual = group_by(decode_hand("V2,SPADES;V4,HEARTS;V3,HEARTS").cards, lambda card: card.colour)
+        expected = { Colour.SPADES: [ decode_card("V2,SPADES") ], Colour.HEARTS: [ decode_card("V3,HEARTS"), decode_card("V4,HEARTS") ] }
+        self.assertEqual(actual, expected)
+
+    def test_dict_equal(self):
+        self.assertEqual({'Name': 'Zara', 'Age': 7}, {'Age': 7, 'Name': 'Zara' })
 
 def decode_card(s):
     attrs = s.split(",")

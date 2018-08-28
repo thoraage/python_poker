@@ -26,6 +26,9 @@ class Card:
         self.value = value
         self.colour = colour
 
+    def __repr__(self):
+        return str(self)
+
     def __str__(self):
         return "Value: " + str(self.value) + ", colour: " + str(self.colour)
 
