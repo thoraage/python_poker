@@ -9,10 +9,11 @@ class Hand:
     def get_combination(self):
         for fn in [self.is_straight_flush, self.is_n_equal(4, Combination.FOUR_EQUAL), self.is_full_house, \
                 self.is_straight, self.is_flush, self.is_n_equal(3, Combination.THREE_EQUAL), \
-                self.is_two_pairs, self.is_n_equal(2, Combination.PAIR), self.is_card]:
+                self.is_two_pairs, self.is_n_equal(2, Combination.PAIR)]:
             value = fn()
             if value != None:
                 return value
+        return self.is_card()
 
     def is_straight_flush(self):
         if self.is_straight() and self.is_flush():
@@ -49,13 +50,11 @@ class Hand:
 
     def is_two_pairs(self):
         dict = group_by(self.cards, lambda card: card.value)
-        distrib = [len(cards) for cards in dict.values()]
-        distrib.sort()
-        if ([1, 2, 2] == distrib):
-            pairs_cards = [card
-                           for cards in dict.values() if len(cards) == 2
-                           for card in cards]
-            pairs_cards.sort(key = lambda c: (c.value, c.colour))
+        pairs_cards = [card
+                       for cards in dict.values() if len(cards) == 2
+                       for card in cards]
+        pairs_cards.sort(key = lambda c: (c.value, c.colour))
+        if len(pairs_cards) == 4:
             return (Combination.TWO_PAIRS, pairs_cards[-1])
         return None
 
