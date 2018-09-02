@@ -35,3 +35,5 @@ class Card:
     def __eq__(self, other):
         return self.value == other.value and self.colour == other.colour
 
+    def __lt__(self, other):
+        return self.value < other.value or (self.value == other.value and self.colour < other.colour)
